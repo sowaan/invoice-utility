@@ -1,0 +1,7 @@
+tkinter
+tkcalendar
+requests
+sqlite3
+configparser
+argparse
+xterm

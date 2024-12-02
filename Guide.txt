@@ -1,0 +1,15 @@
+Guide to to run the generate_sales_invoice_utility.
+
+
+1. Install Python 
+2. Install pip 
+	~steps to install pip
+	1. open cmd and run the curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+	2. run command python get-pip.py
+	3. copy the Script URl and go in Environment Varriables and go to Path create new path and paste the script url there and save it.
+3. Close the Cmd and Open again and run command pip install -r requirements.txt
+4. If the requirnment.txt can not install the packages then you can do it manually
+	1. py install tk or python install tk
+	2. py install requests or python install requests
+	3. py install tkcalender or python install tkcalendar if it requires!
+5. Run the python ui.py in cmd
