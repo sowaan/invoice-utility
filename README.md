@@ -57,7 +57,7 @@ The **Shipment-to-Sales Invoice Utility** simplifies the workflow for managing s
 ### Step 1: Clone the Repository
 ``` 
 - pip install -r requirements.txt
-- python ui.py
+- python main.py
 ---
 ## User Guide
 
