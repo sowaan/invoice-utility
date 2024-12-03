@@ -1,4 +1,4 @@
-# Shipment-to-Sales Invoice Utility
+# Sales Invoice Utility
 
 A Tkinter-based desktop application designed to streamline the process of fetching shipment data, managing it, and generating sales invoices through ERPNext APIs. The application is responsive, efficient, and supports multitasking.
 
