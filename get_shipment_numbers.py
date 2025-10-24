@@ -11,31 +11,35 @@ cursor = conn.cursor()
 
 
 
-def get_shipment_numbers(start_date ="", end_date ="", billing_type="", station="", customer="", icris_number="", export_import=""):
+def get_shipment_numbers(export_import="", start_date ="", end_date ="", billing_type="", station="", customer="", icris_number="", manifest_file_type = "", date_type="", gateway=""):
     """
     Fetch shipment numbers based on the given filters.
     """
-
     params = {
+        'import__export': export_import ,
         'start_date': start_date,
         'end_date': end_date,
         'billing_type': billing_type,
         'station': station,
         'customer': customer,
         'icris_number': icris_number,
-        'import__export': export_import  # Added Export/Import to the parameters
+        'manifest_file_type':manifest_file_type,
+        'date_type':date_type,
+        'gateway':gateway
     }
     print("Getting Shipment Numbers.........")
+
     shipment_api_url = f"{config.ERP_CONFIG['SITE_URL']}{config.ERP_CONFIG['SHIPMENT_API_URL']}"
     
 
     try:
         # Make the GET request
+        # print(f"Fetching shipment numbers from {shipment_api_url} with params: {params}")
+         # Use the requests library to make the API call
         response = requests.get(shipment_api_url, headers=config.ERP_CONFIG['HEADERS'], params=params)
         if response.status_code == 200:
             data = response.json()
             shipment_numbers = data.get('message', [])
-            
             return shipment_numbers  # Return shipment numbers
             
         else:
@@ -53,25 +57,38 @@ def fetch_and_insert_shipment_numbers(parent_id):
     cursor.execute("DELETE FROM shipment_numbers WHERE parent_id = ?", (parent_id,))
     conn.commit()
 
-    parent_record = cursor.execute("""
-        SELECT start_date, end_date, billing_type, station, customer, icris_number, export_import
-        FROM records WHERE id = ?
-    """, (parent_id,)).fetchone()
+
+    # print('parent_id',parent_id)
+    # parent_record = cursor.execute("""
+    #     SELECT export_import, start_date, end_date, billing_type, station, customer, icris_number, date_type, manifest_file_type, gateway
+    #     FROM records WHERE id = ?
+    # """, (parent_id,)).fetchone()
+
+    # print('parent_record',parent_record)
+
+
+
+    parent_record = cursor.execute("SELECT * FROM records WHERE id = ?", (parent_id,)).fetchone()
+    
     
     if not parent_record:
         messagebox.showerror("Error", "Parent record not found!")
         return
 
-    start_date, end_date, billing_type, station, customer, icris_number, export_import = parent_record
+    idx, export_import, start_date, end_date, billing_type, station, customer, icris_number, date_type, gateway, manifest_file_type, sid, pd = parent_record
     shipment_numbers = get_shipment_numbers(
+    export_import="" if export_import== None else export_import,
     start_date="" if start_date== None else start_date,
     end_date="" if end_date== None else end_date,
     billing_type="" if billing_type== None else billing_type,
     station="" if station== None else station,
     customer="" if customer== None else customer,
     icris_number="" if icris_number== None else icris_number,
-    export_import="" if export_import== None else export_import
-)
+    manifest_file_type="" if manifest_file_type== None else manifest_file_type,
+    date_type="" if date_type== None else date_type,
+    gateway="" if gateway== None else gateway
+
+    )
 
     
     if not shipment_numbers:
@@ -84,13 +101,13 @@ def fetch_and_insert_shipment_numbers(parent_id):
         ]
     # Perform a single batch insert
     cursor.executemany("""
-    INSERT INTO shipment_numbers (parent_id, shipment_number, sales_invoice, logs, shipment_index) 
+    INSERT INTO shipment_numbers (parent_id, shipment_number, sales_invoice, logs, shipment_index)
     VALUES (?, ?, ?, ?, ?)
     """, records_to_insert)
     conn.commit()
     os.system('cls' if os.name == 'nt' else 'clear')
-    print("All Shipment Number Inserted")
-    messagebox.showinfo("Success", "Shipment numbers updated successfully.")
+    print(f"Successfully inserted {len(shipment_numbers)} shipment numbers.")
+    messagebox.showinfo("Success", f"Fetched {len(shipment_numbers)} shipment numbers successfully.")
 
 
 
@@ -104,4 +121,5 @@ parser.add_argument("--parent_id", required=True, help="Parent Id")
 args = parser.parse_args()
 
 # Call the function with the arguments from the command line
+# print(f"Fetching and inserting shipment numbers for parent_id: {args}")
 fetch_and_insert_shipment_numbers(args.parent_id)
