@@ -1,0 +1,9 @@
+Bring Import Export on the top.
+Billing Tool doesn’t work with ICRIS account
+Sorting option is not available in billing tool
+Get Shipment Number do not display how many shipments are fetched by the billing tool
+Incorrect information is displayed in Billing Tool Logs
+If invoices are missed due to poor connection, billing tool misses the invoice instead of making sure the invoice is created.
+Sales Invoice Error Log do not provide any information to which job Error log belongs to.
+If a job has 100 invoices and 2 of the fails, Sales Invoice Error Log do not give any information which 2 invoices had the problem
+Every time when billing tool starts, it should 1st update latest ICRIS, Customers and Gateway Information automatically.

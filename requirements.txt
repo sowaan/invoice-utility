@@ -1,0 +1,6 @@
+tk
+tkcalendar
+requests
+configparser
+argparse
+tqdm
