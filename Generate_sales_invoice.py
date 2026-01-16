@@ -10,6 +10,21 @@ import time
 import json
 from requests.exceptions import ConnectionError, RequestException, Timeout
 
+
+import logging
+import os
+
+LOG_DIR = "logs"
+os.makedirs(LOG_DIR, exist_ok=True)
+
+logging.basicConfig(
+    filename=os.path.join(LOG_DIR, "invoice_utility.log"),
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(message)s",
+)
+
+logger = logging.getLogger(__name__)
+
 # print('generate')
 conn = sqlite3.connect(config.DATABASE_CONFIG['DB_PATH'])  # Use DB_PATH from config
 cursor = conn.cursor()
@@ -76,8 +91,20 @@ def generate_sales_invoices(parent_id, login_username):
                         
                         update_sales_invoice_column(conn, cursor, shipment_number, sales_invoice_name, logs)
                     except Exception as e:
+                        logger.exception(
+                            "JSON parse error | shipment=%s | manifest_date=%s",
+                            shipment_number,
+                            manifest_input_date
+                        )
                         print(f"Error parsing JSON response: {str(e)}")
                 else:
+                    logger.error(
+                        "Invoice API failed | shipment=%s | manifest_date=%s | status=%s | response=%s",
+                        shipment_number,
+                        manifest_input_date,
+                        response.status_code,
+                        response.text
+                    )
                     print(f"Error generating invoice for shipment {shipment_number}: {response.status_code} - {response.text}")
                     continue
                 pbar.set_postfix(Created=create, Duplicate=duplicate)
