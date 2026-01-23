@@ -2,5 +2,5 @@
 myenv/
 venv/
 .env/
-data.db
 logs/
+data.db

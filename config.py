@@ -21,8 +21,6 @@ ERP_CONFIG = {
     #     'Content-Type': 'application/json',  # The content type for API requests
     # },
     
-
-
     'SITE_URL': 'http://127.0.0.1:8003/', #local
     'API_KEY': 'eaddb52294d113e', #local
     'API_SECRET': '11924cb7830a5f8', # local
@@ -30,6 +28,14 @@ ERP_CONFIG = {
         'Authorization': 'token eaddb52294d113e:11924cb7830a5f8',  # Authorization header for API requests
         'Content-Type': 'application/json',  # The content type for API requests
     },
+
+    # 'SITE_URL': 'https://ups-dev.sowaanerp.com/', #local
+    # 'API_KEY': 'a45a4fe9effad75', #local
+    # 'API_SECRET': '26201c03c8ff537', # local
+    # 'HEADERS': {
+    #     'Authorization': 'token a45a4fe9effad75:26201c03c8ff537',  # Authorization header for API requests
+    #     'Content-Type': 'application/json',  # The content type for API requests
+    # },
 
 
 
